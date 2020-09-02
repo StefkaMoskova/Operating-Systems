@@ -24,7 +24,7 @@ while read file; do
 	if [[ $line =~ ":" ]]; then
 		if [[ $(echo $line | cut -d":" -f2) == "" ]]; then
 				cur=$(echo $line | sed "s/This plat has [an,a]/:/g")
-			fi
+        fi
 
 		cur=$(echo $line | cut -d":" -f2|tr  " " ",")
 		echo "$cur" >> bar.csv 
