@@ -12,10 +12,12 @@ int main(int argc, char* argv[]){
     pipe(fd);
     pid_t cat_pid;
 
-    if (cat_pid == fork() = -1)
+    if ((cat_pid = fork()) == -1)
     {
         errx(1, "Error cat fork");
     }
+    
+
     
     if (cat_pid == 0)
     {

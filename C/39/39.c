@@ -1,5 +1,6 @@
 #include <unistd.h>
 #include <stdint.h>
+#include <stdlib.h>
 #include <stdio.h>
 #include <fcntl.h>
 #include <sys/types.h>
@@ -7,23 +8,20 @@
 #include <err.h>
 #include <errno.h>
 
-static off_t statx(const char* fname){
-    struct stat buff;
+static off_t getFileSize(const char* file){
+	struct stat st;
 
-    if (stat(fname, &buff) == -1){
-        errx(1, "Error stat fname");
-    }
+	if(stat(file, &st) == -1)
+		return -1;
 
-    if (!S_ISREG(buff.st_mode)){
-        errx(1, "%s is not a regular file!", fname);
-    }
-    
-    return buff.st_size;
+	return st.st_size;
 }
 
 static void readx(const int fd, uint8_t* const buff, const size_t sz, const char* const fname){
+    //little endian - reading right to left 
     size_t left = sz;
     while (left > 0) {
+        //buff + sz - left offset of the read elements
         const ssize_t n = read(fd, buff + sz - left, left);
         if (n == -1 ){
             errx(1, "Could not read from %s", fname);
@@ -53,13 +51,26 @@ static void writex(const int fd, const uint8_t* const buff, const size_t sz, con
     }
 }
 
+static off_t copyContent(int fdSrc, int fdDest){
+	char buf[1<<9];
+	off_t bytesCopied = 0;
+	ssize_t rd;
+	while((rd = read(fdSrc, &buf, sizeof(buf))) > 0){
+		if(write(fdDest, &buf, rd) != rd)
+			return -1;
+		bytesCopied += rd;
+	}
+
+	return bytesCopied;
+}
+
 int main(int argc, char* argv[]){
     if (argc != 4){
         errx(1, "Invalid number of args");
     }
     
-    off_t fd1_size = statx(argv[1]);
-    off_t fd2_size = statx(argv[2]);
+    off_t fd1_size = getFileSize(argv[1]);
+    off_t fd2_size = getFileSize(argv[2]);
 
     if (fd1_size != fd2_size){
         errx(1, "%s and %s have a diferent file size!", argv[1], argv[2]);

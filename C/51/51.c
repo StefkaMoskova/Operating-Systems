@@ -1,4 +1,16 @@
  // cut -d: -f7 /etc/passwd | sort | uniq -c | sort -n
+ //make 51
+ //./main q
+
+#include <unistd.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <fcntl.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <err.h>
+#include <errno.h>
 
  int main(){
 
@@ -14,7 +26,7 @@
      pid_t sort_pid;
      pid_t uniq_pid;
 
-    if (cut_pid = fork() == -1)
+    if ((cut_pid = fork()) == -1)
     {
         errx(1, "Error fork cut" );
     }
@@ -37,7 +49,7 @@
 
      close(fd1[1]);
 
-     if (sort_pid = fork() == -1)
+     if ((sort_pid = fork()) == -1)
      {
          errx(1, "Error fork sort" );
      }
@@ -64,7 +76,7 @@
      
     close(fd2[1]);
 
-    if (uniq_pid = fork() == -1)
+    if ((uniq_pid = fork()) == -1)
     {
         errx(1, "Error fork uniq" );
     }

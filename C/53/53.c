@@ -10,6 +10,10 @@ int main(int argc, char* argv[]){
     int fd2[2];
     int fd3[2];
     
+    if (argc != 2){
+        errx(1, "Invalid number of arguments");
+    }
+
     pipe(fd1);
     pipe(fd2);
     pipe(fd3);
@@ -29,7 +33,7 @@ int main(int argc, char* argv[]){
             errx(1, "error dup2 find");
         }
 
-        if(execlp("find", "find", argv[1], "-type f", "-printf", "%T@ %p\n", NULL) == -1){
+        if(execlp("find", "find", argv[1], "-typef", "-printf", "%T@ %p\n", NULL) == -1){
             errx(1, "error execlp find");
         }
     }
