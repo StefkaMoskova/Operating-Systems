@@ -29,8 +29,7 @@ int main(){
     uint32_t a;
 
     while (read(fd1, x, sizeof(x)) == sizeof(x)){
-        off_t lpt;
-        lpt = lseek(fd2, x[0]*sizeof(a),SEEK_SET);
+        off_t lpt = lseek(fd2, x[0]*sizeof(a),SEEK_SET);
         
         if (lpt == -1){
 		errx(1, "Error lseek for file f1");

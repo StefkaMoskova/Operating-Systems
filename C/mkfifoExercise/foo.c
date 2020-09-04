@@ -1,4 +1,3 @@
-
 int main(){
     int fd1;
     fd1 = open("/Users/svmoskova/Desktop/OS-materials/C/mkfifoExercise", O_RDONLY);

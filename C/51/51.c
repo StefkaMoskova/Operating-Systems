@@ -1,4 +1,5 @@
  // cut -d: -f7 /etc/passwd | sort | uniq -c | sort -n
+//  cat /etc/passwd | cut -d: -f7 | sort | uniq -c | sort -n
  //make 51
  //./main q
 
@@ -26,7 +27,7 @@
      pid_t sort_pid;
      pid_t uniq_pid;
 
-    if ((cut_pid = fork()) == -1)
+   if ((cut_pid = fork()) == -1)
     {
         errx(1, "Error fork cut" );
     }
